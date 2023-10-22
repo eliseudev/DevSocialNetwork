@@ -102,3 +102,18 @@ func (repo UsuarioDB) Atualizar(usuarioId uint64, usuario models.Usuario) error 
 
 	return nil
 }
+
+func (repo UsuarioDB) Deletar(usuarioId uint64) error {
+	sqlQuery := "delete from usuarios where id = ?"
+	statement, err := repo.db.Prepare(sqlQuery)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(usuarioId); err != nil {
+		return err
+	}
+
+	return nil
+}

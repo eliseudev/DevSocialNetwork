@@ -1,9 +1,12 @@
 package models
 
 import (
+	"api/src/security"
 	"errors"
 	"strings"
 	"time"
+
+	"github.com/badoux/checkmail"
 )
 
 type Usuario struct {
@@ -15,12 +18,15 @@ type Usuario struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
-func (usuario *Usuario) ValidFormat(stage string) error {
-	if err := usuario.isValid(stage); err != nil {
+func (usuario *Usuario) ValidFormat(etapa string) error {
+	if err := usuario.isValid(etapa); err != nil {
 		return err
 	}
 
-	usuario.isFormat()
+	if err := usuario.isFormat(etapa); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -34,7 +40,12 @@ func (usuario *Usuario) isValid(etapa string) error {
 	}
 
 	if usuario.Email == "" {
-		return errors.New("o email é obrigatório")
+
+		return errors.New("o e-mail é obrigatório")
+	}
+
+	if err := checkmail.ValidateFormat(usuario.Email); err != nil {
+		return errors.New("por favor digite um e-mail válido")
 	}
 
 	if etapa == "cadastro" && usuario.Senha == "" {
@@ -44,8 +55,18 @@ func (usuario *Usuario) isValid(etapa string) error {
 	return nil
 }
 
-func (usuario *Usuario) isFormat() {
+func (usuario *Usuario) isFormat(etapa string) error {
 	usuario.Nome = strings.TrimSpace(usuario.Nome)
 	usuario.Nick = strings.TrimSpace(usuario.Nick)
 	usuario.Email = strings.TrimSpace(usuario.Email)
+
+	if etapa == "cadastro" {
+		senhaHash, err := security.Hash(usuario.Senha)
+		if err != nil {
+			return err
+		}
+		usuario.Senha = string(senhaHash)
+	}
+
+	return nil
 }
