@@ -12,6 +12,7 @@ import (
 var (
 	StringConnection = ""
 	Port             = 0
+	SecretKey        []byte
 )
 
 func Carregar() {
@@ -30,5 +31,7 @@ func Carregar() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
+
+	SecretKey = []byte(os.Getenv("SECRET_KEY"))
 
 }
