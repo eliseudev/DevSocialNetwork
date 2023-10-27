@@ -18,6 +18,7 @@ func Autenticar(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := autenticacao.ValidarToken(r); err != nil {
 			response.Err(w, http.StatusUnauthorized, err)
+			return
 		}
 		next(w, r)
 	}

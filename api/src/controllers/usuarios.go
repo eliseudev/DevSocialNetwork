@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"api/src/autenticacao"
 	"api/src/db"
 	"api/src/models"
 	"api/src/repository"
 	"api/src/response"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"strconv"
@@ -102,6 +104,17 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usuarioIdToken, err := autenticacao.ExtrairUsuarioID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	if usuarioID != usuarioIdToken {
+		response.Err(w, http.StatusForbidden, errors.New("não é possivel atualizar esse usuario"))
+		return
+	}
+
 	bodyRequest, err := io.ReadAll(r.Body)
 	if err != nil {
 		response.Err(w, http.StatusUnprocessableEntity, err)
@@ -140,6 +153,17 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 	usuarioID, err := strconv.ParseUint(params["usuarioId"], 10, 64)
 	if err != nil {
 		response.Err(w, http.StatusBadRequest, err)
+		return
+	}
+
+	usuarioIdToken, err := autenticacao.ExtrairUsuarioID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	if usuarioID != usuarioIdToken {
+		response.Err(w, http.StatusForbidden, errors.New("não é possivel deletar esse usuario"))
 		return
 	}
 

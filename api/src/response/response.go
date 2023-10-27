@@ -7,9 +7,9 @@ import (
 )
 
 // JSON retorna uma resposta em JSON para requisição
-func JSON(w http.ResponseWriter, statuscode int, dados interface{}) {
+func JSON(w http.ResponseWriter, statusCode int, dados interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statuscode)
+	w.WriteHeader(statusCode)
 
 	if dados != nil {
 		if err := json.NewEncoder(w).Encode(dados); err != nil {
@@ -19,8 +19,8 @@ func JSON(w http.ResponseWriter, statuscode int, dados interface{}) {
 }
 
 // Err retorna um erro em formato JSON
-func Err(w http.ResponseWriter, statuscode int, err error) {
-	JSON(w, statuscode, struct {
+func Err(w http.ResponseWriter, statusCode int, err error) {
+	JSON(w, statusCode, struct {
 		Err string `json:"err"`
 	}{
 		Err: err.Error(),
