@@ -135,3 +135,18 @@ func (repo UsuarioDB) BuscarUsuarioEmail(email string) (models.Usuario, error) {
 	}
 	return usuario, nil
 }
+
+func (respo UsuarioDB) Seguir(usuarioId, seguidorId uint64) error {
+	sqlQuery := "insert ignore into seguidores (usuario_id, seguidor_id) values(?, ?)"
+	statement, err := respo.db.Prepare(sqlQuery)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(usuarioId, seguidorId); err != nil {
+		return err
+	}
+
+	return nil
+}
