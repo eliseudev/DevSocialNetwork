@@ -37,9 +37,27 @@ var rotasUsuarios = []Rota{
 		RequerAutenticacao: true,
 	},
 	{
-		Uri:                "/usuarios/{usuarioId}/seguir",
+		Uri:                "/usuarios/{usuarioId}/follow",
 		Metodo:             http.MethodPost,
 		Funcao:             controllers.SeguirUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		Uri:                "/usuarios/{usuarioId}/unfollow",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.ParaSeguirUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		Uri:                "/usuarios/{usuarioId}/seguidores",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.BuscarSeguidores,
+		RequerAutenticacao: true,
+	},
+	{
+		Uri:                "/usuarios/{usuarioId}/atualizar-senha",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.AtualizarSenha,
 		RequerAutenticacao: true,
 	},
 }
