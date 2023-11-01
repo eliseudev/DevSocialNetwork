@@ -322,6 +322,10 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bodyRequest, err := io.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err)
+		return
+	}
 
 	var senha models.Senha
 	if err = json.Unmarshal(bodyRequest, &senha); err != nil {
