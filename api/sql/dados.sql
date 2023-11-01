@@ -15,3 +15,5 @@ values
 ("Publicação do Usuário 1", "Essa é a publicação do usuário 1! Oba!", 1),
 ("Publicação do Usuário 2", "Essa é a publicação do usuário 2! Oba!", 2),
 ("Publicação do Usuário 3", "Essa é a publicação do usuário 3! Oba!", 3);
+
+insert into seguidores (usuario_id, seguidor_id) values(2,1);
